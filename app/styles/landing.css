@@ -43,7 +43,6 @@ body.landing {
     -webkit-transition-delay: 0.2s;
     -moz-transition-delay: 0.2s;
     transition-delay: 0.2s;
-    opacity: 1;
 }
 
 .point .point-title {
