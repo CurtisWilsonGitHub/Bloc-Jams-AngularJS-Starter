@@ -1,13 +1,27 @@
 (function () {
-  function SongPlayer() {
+  function SongPlayer(Fixtures) {
     var SongPlayer = {};
 
+    /**
+    * @desc object of current album
+    * @type {object}
+    */
 
+    var currentAlbum = Fixtures.getAlbum();
 
-  /**
-  * @desc Buzz object audio file
-  * @type {object}
-  */
+/**
+*@function getSongindex
+*@desc gets index number of currently playing song from AlbumCtrl
+*@param {object} songs
+*/
+    var getSongIndex = function(song){
+      return currentAlbum.songs.indexOf(song);
+    };
+
+/**
+* @desc Buzz object audio file
+* @type {object}
+*/
 
     var currentBuzzObject = null;
 
@@ -89,8 +103,18 @@
 */
 
 SongPlayer.previous = function(){
-  var currentSongIndex = getSongIndex(SongPlayer.currentsong);
-  currentSongIndex = --;
+  var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+  currentSongIndex--;
+
+ if (currentSongIndex < 0){
+   currentBuzzObject.stop();
+   SongPlayer.currentSong.playing = null;
+ }else{
+   var song = currentAlbum.songs[currentSongIndex];
+   setSong(song);
+   playSong(song);
+ }
+
 };
 
     return SongPlayer;
@@ -102,6 +126,6 @@ SongPlayer.previous = function(){
 
   angular
   .module('blocJams')
-  .factory('SongPlayer', SongPlayer);
+  .factory('SongPlayer', ['Fixtures', SongPlayer]);
 
 })();
