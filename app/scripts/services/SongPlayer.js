@@ -59,11 +59,13 @@
     SongPlayer.play = function(song) {
       song = song || SongPlayer.currentSong;
       if (SongPlayer.currentSong !== song){
-      setSong(song);
-      playSong(song);
+        setSong(song);
+        playSong(song);
     }else if (SongPlayer.currentSong === song){
-      if (currentBuzzObject.isPaused()){
-        currentBuzzObject.play();
+      if (currentBuzzObject === null){
+        return;
+      }else if (currentBuzzObject.isPaused()){
+        playSong(song);;
       }
     }
   };
@@ -79,6 +81,17 @@
     currentBuzzObject.pause();
     song.playing = false;
   };
+
+/**
+*@function SongPlayer.previous
+*@desc Selects the previous song in album
+*@param none
+*/
+
+SongPlayer.previous = function(){
+  var currentSongIndex = getSongIndex(SongPlayer.currentsong);
+  currentSongIndex = --;
+};
 
     return SongPlayer;
   }
