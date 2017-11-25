@@ -12,7 +12,7 @@
 /**
 *@function getSongindex
 *@desc gets index number of currently playing song from AlbumCtrl
-*@param {object} songs
+*@param {object} song
 */
     var getSongIndex = function(song){
       return currentAlbum.songs.indexOf(song);
@@ -50,13 +50,29 @@
 /**
 *@function playSong
 *@desc Plays currently paused song and set song.playing to true
-*@param {objec} song
+*@param {object} song
 */
 
     var playSong = function (song){
       currentBuzzObject.play();
       song.playing = true;
     }
+
+  /**
+  *@function stopSong
+  *@desc stops playback and set property of song object to null
+  *@param {object} song
+  */
+
+   var stopSong = function(song){
+    currentBuzzObject.stop();
+    song.playing = false;
+   }
+
+   SongPlayer.test = function(){
+    return "this is a test";
+   }
+
 
   /**
   *@desc Variable track wheter song is playing
@@ -98,31 +114,51 @@
 
 /**
 *@function SongPlayer.previous
-*@desc Selects the previous song in album
+*@desc Selects the previous song in album. If there's no previous song, it'll stop playback
 *@param none
 */
 
 SongPlayer.previous = function(){
+  song = SongPlayer.currentSong;
   var currentSongIndex = getSongIndex(SongPlayer.currentSong);
   currentSongIndex--;
 
  if (currentSongIndex < 0){
-   currentBuzzObject.stop();
-   SongPlayer.currentSong.playing = null;
+   if(SongPlayer.currentSong){
+     currentSongIndex++;
+     stopSong(song);
+   }
+
  }else{
    var song = currentAlbum.songs[currentSongIndex];
    setSong(song);
    playSong(song);
  }
+};
+
+/**
+*@function SongPlayer.next
+*@desc Selects the next album in album and palys it. If there is no next song, it'll stop playback.
+*@param none
+*/
+
+SongPlayer.next = function(){
+  song = SongPlayer.currentSong;
+  var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+  currentSongIndex++;
+
+  if( currentAlbum.songs[currentSongIndex] ){
+    var song = currentAlbum.songs[currentSongIndex];
+    setSong(song);
+    playSong(song);
+  }else {
+    stopSong(song);
+  }
 
 };
 
-    return SongPlayer;
+return SongPlayer;
   }
-
-
-
-
 
   angular
   .module('blocJams')
