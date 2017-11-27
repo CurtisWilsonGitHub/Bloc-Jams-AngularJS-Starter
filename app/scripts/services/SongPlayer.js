@@ -1,5 +1,5 @@
 (function () {
-  function SongPlayer(Fixtures) {
+  function SongPlayer($rootScope,Fixtures) {
     var SongPlayer = {};
 
     /**
@@ -44,6 +44,12 @@
       });
 
       SongPlayer.currentSong = song;
+        
+    currentBuzzObject.bind('timeupdate',function(){
+        $rootScope.$apply(function(){
+            SongPlayer.currentTime = currentBuzzObject.getTime();
+        });
+    })
 
     };
 
@@ -69,18 +75,33 @@
     song.playing = false;
    }
 
-   SongPlayer.test = function(){
-    return "this is a test";
-   }
-
-
   /**
   *@desc Variable track wheter song is playing
   *@type {boolean}
   */
 
   SongPlayer.currentSong = null;
+      
+/**
+*@desc Current playback time (in seconds) of currently playing song
+*@type {number}
+*/  
+      
+   SongPlayer.currentTime = null;
 
+/**
+*@function setCurrentTime
+*@desc set current time (in seconds) of currently playing song
+*@param {Number} time
+*/
+    
+    SongPlayer.setCurrentTime = function (time)  {
+        if (currentBuzzObject){
+            currentBuzzObject.setTime(time);
+            
+        }
+    };
+      
 /**
 *@function SongPlayer.play
 *@desc Checks to see if player is paused. If so, plays song
@@ -118,23 +139,23 @@
 *@param none
 */
 
-SongPlayer.previous = function(){
-  song = SongPlayer.currentSong;
-  var currentSongIndex = getSongIndex(SongPlayer.currentSong);
-  currentSongIndex--;
+    SongPlayer.previous = function(){
+      song = SongPlayer.currentSong;
+      var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+      currentSongIndex--;
 
- if (currentSongIndex < 0){
-   if(SongPlayer.currentSong){
-     currentSongIndex++;
-     stopSong(song);
-   }
+     if (currentSongIndex < 0){
+       if(SongPlayer.currentSong){
+         currentSongIndex++;
+         stopSong(song);
+       }
 
- }else{
-   var song = currentAlbum.songs[currentSongIndex];
-   setSong(song);
-   playSong(song);
- }
-};
+     }else{
+       var song = currentAlbum.songs[currentSongIndex];
+       setSong(song);
+       playSong(song);
+     }
+    };
 
 /**
 *@function SongPlayer.next
@@ -142,26 +163,27 @@ SongPlayer.previous = function(){
 *@param none
 */
 
-SongPlayer.next = function(){
-  song = SongPlayer.currentSong;
-  var currentSongIndex = getSongIndex(SongPlayer.currentSong);
-  currentSongIndex++;
+    SongPlayer.next = function(){
+      song = SongPlayer.currentSong;
+      var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+      currentSongIndex++;
 
-  if( currentAlbum.songs[currentSongIndex] ){
-    var song = currentAlbum.songs[currentSongIndex];
-    setSong(song);
-    playSong(song);
-  }else {
-    stopSong(song);
-  }
+      if( currentAlbum.songs[currentSongIndex] ){
+        var song = currentAlbum.songs[currentSongIndex];
+        setSong(song);
+        playSong(song);
+      }else {
+        stopSong(song);
+      }
 
-};
+    };
+
 
 return SongPlayer;
   }
 
   angular
   .module('blocJams')
-  .factory('SongPlayer', ['Fixtures', SongPlayer]);
+  .factory('SongPlayer', ['$rootScope','Fixtures', SongPlayer]);
 
 })();
