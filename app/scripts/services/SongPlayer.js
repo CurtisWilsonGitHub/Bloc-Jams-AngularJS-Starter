@@ -44,7 +44,7 @@
       });
 
       SongPlayer.currentSong = song;
-        
+
     currentBuzzObject.bind('timeupdate',function(){
         $rootScope.$apply(function(){
             SongPlayer.currentTime = currentBuzzObject.getTime();
@@ -81,12 +81,19 @@
   */
 
   SongPlayer.currentSong = null;
-      
+
+  /**
+  *@desc Varibale tracks the voume setting
+  *@type{number}
+  */
+
+  SongPlayer.volume = null;
+
 /**
 *@desc Current playback time (in seconds) of currently playing song
 *@type {number}
-*/  
-      
+*/
+
    SongPlayer.currentTime = null;
 
 /**
@@ -94,14 +101,14 @@
 *@desc set current time (in seconds) of currently playing song
 *@param {Number} time
 */
-    
+
     SongPlayer.setCurrentTime = function (time)  {
         if (currentBuzzObject){
             currentBuzzObject.setTime(time);
-            
+
         }
     };
-      
+
 /**
 *@function SongPlayer.play
 *@desc Checks to see if player is paused. If so, plays song
@@ -178,6 +185,14 @@
 
     };
 
+/**
+*@function setVolume
+*@desc set volume from input on volume seek seekBar
+*@param {number} volume
+*/
+    SongPlayer.setVolume = function(volume){
+      currentBuzzObject.setVolume(volume);
+    };
 
 return SongPlayer;
   }
