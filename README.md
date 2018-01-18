@@ -1,4 +1,4 @@
-# Bloc Jams AngularJS
+# FunJames, a AngularJS project
 
 A spotify like music player. Made in collaboration with Bloc.io . Poject was made to gain a familiarity with the AngularJS framework.
 
